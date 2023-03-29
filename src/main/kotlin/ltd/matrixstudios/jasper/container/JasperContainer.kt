@@ -25,7 +25,7 @@ abstract class JasperContainer<K, T>(
      * @param item
      * @return respective update result
      */
-    fun update(key: K, item: K): UpdateResult {
+    fun update(key: K, item: T): UpdateResult {
         val gsonObject = DefaultSerializer.GSON.toJson(item)
         val gsonToBson = Document.parse(gsonObject)
         val filter = Document("_id", key.toString())
