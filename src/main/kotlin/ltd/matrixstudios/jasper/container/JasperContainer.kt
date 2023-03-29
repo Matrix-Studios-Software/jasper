@@ -14,7 +14,8 @@ import org.bson.Document
 abstract class JasperContainer<K, T>(
     private val serializableClass: Class<T>
 ) {
-    private val collection = Jasper.globalDatabase.getCollection(serializableClass.getAnnotation(DataObject::class.java).collection)
+    private val collection =
+        Jasper.globalDatabase.getCollection(serializableClass.getAnnotation(DataObject::class.java).collection)
 
     /**
      * Updates a value in mongo
@@ -24,8 +25,7 @@ abstract class JasperContainer<K, T>(
      * @param item
      * @return respective update result
      */
-    fun update(key: K, item: K) : UpdateResult
-    {
+    fun update(key: K, item: K): UpdateResult {
         val gsonObject = DefaultSerializer.GSON.toJson(item)
         val gsonToBson = Document.parse(gsonObject)
         val filter = Document("_id", key.toString())
@@ -40,19 +40,20 @@ abstract class JasperContainer<K, T>(
      * @param key
      * @return respective delete result
      */
-    fun delete(key: K) : DeleteResult = collection.deleteOne(Document("_id", key.toString()))
+    fun delete(key: K): DeleteResult = collection.deleteOne(Document("_id", key.toString()))
 
     /**
      * Returns a list of every mongo element
      *
      * @return result of query
      */
-    fun getAllItems() : List<T> = BundledQuery<T>(collection, serializableClass).fetchAndSerialize()
+    fun getAllItems(): List<T> = BundledQuery<T>(collection, serializableClass).fetchAndSerialize()
 
     /**
      * Returns a list of every mongo element
      *
      * @return result of query
      */
-    fun getByKey(key: K) : List<T> = BundledQuery<T>(collection, serializableClass).fetchAndSerializeWithRestriction(Document("_id", key.toString()))
+    fun getByKey(key: K): List<T> =
+        BundledQuery<T>(collection, serializableClass).fetchAndSerializeWithRestriction(Document("_id", key.toString()))
 }
