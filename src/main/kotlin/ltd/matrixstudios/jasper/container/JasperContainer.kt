@@ -1,5 +1,6 @@
 package ltd.matrixstudios.jasper.container
 
+import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.result.DeleteResult
 import com.mongodb.client.result.UpdateResult
 import ltd.matrixstudios.jasper.Jasper
@@ -30,7 +31,7 @@ abstract class JasperContainer<K, T>(
         val gsonToBson = Document.parse(gsonObject)
         val filter = Document("_id", key.toString())
 
-        return collection.updateOne(filter, gsonToBson)
+        return collection.updateOne(filter, Document("\$set", gsonToBson), UpdateOptions().upsert(true))
     }
 
     /**
